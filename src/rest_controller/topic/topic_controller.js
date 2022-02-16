@@ -9,7 +9,7 @@ const createTopic = async (req, res, next) => {
     const topicModel = new TopicModel({
         content: req.body.content,
         idCauHoi: req.body.idCauHoi,
-        createdAt: Date(),
+        createdAt: getNowFormatted(),
         createdBy: 12,
     });
 
@@ -31,17 +31,18 @@ const createTopic = async (req, res, next) => {
 
 
 const getAllTopic = async (req, res, next) => {
-    //find answer by id
+    //Lấy tất cả các chủ đề lấy các trường id content createdBy createdAt updatedAt updatedBy
     TopicModel.find()
         .select("id content createdBy createdAt updatedAt updatedBy")
         .then((data) => {
             data.forEach((element) => {
-                element.createdAt = format(element.createdAt, datePattern)
+                element.createdAt = format(element.createdAt, datePattern);
+                element.updatedAt = format(element.updatedAt, datePattern);
             })
             return res.status(200).json(
                 JsonObject({
                     code: 0,
-                    data: JsonList(1, 1, 2, data),
+                    data: JsonList(1, data.length, data.length, data),
                 })
             );
         })
@@ -86,83 +87,88 @@ const getAllAnswers = async (req, res, next) => {
             console.log(error);
         });
 };
-
-const deleteAnswer = async (req, res, next) => {
-    //check role
-    var hasRole = await verifyRole(res, {
-        roleId: delete_answer.id,
-        userId: req.user.id,
-    });
-    if (hasRole === false) {
-        return res
-            .status(status.success)
-            .json(
-                baseJson.baseJson({ code: 99, message: "Tài khoản không có quyền" })
-            );
-    }
-
-    //delete answer by id
-    Answer.deleteOne({ id: req.query.id })
+*/
+const deleteTopic = async (req, res, next) => {
+    let isExist = await verifyTopic(req, res);
+    if (isExist) return;
+    // Xóa topic bằng id
+    TopicModel.deleteOne({id: req.body.id})
         .then(() => {
-            return res.status(status.success).json(
-                baseJson.baseJson({
+            return res.status(200).json(
+                JsonObject({
                     code: 0,
-                    message: "delete answer finish!",
-                    data: req.query.id,
+                    data: {},
                 })
             );
         })
         .catch((error) => {
-            next(error);
+            return res.status(status.success).json(
+                JsonObject({
+                    code: 0,
+                    data: error,
+                })
+            );
         });
 };
 
-const updateAnswer = async (req, res) => {
-    //check role
-    var hasRole = await verifyRole(res, {
-        roleId: update_answer.id,
-        userId: req.user.id,
-    });
-    if (hasRole === false) {
-        return res
-            .status(status.success)
-            .json(
-                baseJson.baseJson({ code: 99, message: "Tài khoản không có quyền" })
-            );
+const verifyTopic = async (req, res) => {
+    if (req.body.id === undefined) {
+        res.status(200).json(
+            JsonObject({
+                code: 99,
+                message: "id is required",
+            })
+        );
+        return true;
     }
+    let topic = await TopicModel.findOne({id: req.body.id});
+    if (topic === null) {
+        res.status(200).json(
+            JsonObject({
+                code: 99,
+                message: "Chủ đề không tồn tại",
+            })
+        );
+        return true;
+    }
+    return false;
+}
 
-    //update answer
-    Answer.updateOne(
-        //update by id
-        { id: req.body.id },
-        //set and update data
+const updateTopic = async (req, res) => {
+    let isExist = await verifyTopic(req, res);
+    if (isExist) return;
+
+    //update topic
+    TopicModel.updateOne({id: req.body.id},
         {
             $set: {
                 content: req.body.content,
-                idCauHoi:req.body.idCauHoi,
-                updatedBy: req.user.id,
+                idCauHoi: req.body.idCauHoi,
+                updatedBy: 12,
                 updatedAt: getNowFormatted(),
             },
-        }
-    )
+        })
         .then(() => {
-            return res.status(status.success).json(
-                baseJson.baseJson({
+            return res.status(200).json(
+                JsonObject({
                     code: 0,
-                    message: "update answer finish!",
+                    data: {}
                 })
             );
         })
         .catch((error) => {
-            console.log(error);
+            return res.status(200).json(
+                JsonObject({
+                    code: 0,
+                    data: error
+                })
+            );
         });
 };
-*/
+
 
 module.exports = {
     createTopic,
     getAllTopic,
-    /*    getAllAnswers,
-        deleteAnswer,
-        updateAnswer,*/
+    deleteTopic, updateTopic,
 };

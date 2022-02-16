@@ -4,7 +4,7 @@ const datePattern = "DD/MM/yyyy HH:mm:ss";
 
 // Lấy thời gian hiện tại theo format yyyy/MM/DD HH:mm:ss
 function getNowFormatted() {
-    return moment().format(datePattern);
+    return moment();
 }
 
 // Chuyển từ date sang string
