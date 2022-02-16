@@ -3,7 +3,7 @@ const TopicModel = require('../../model/topic_model')
 const {JsonList} = require("../../system/base_json");
 const {JsonObject} = require("../../system/base_json");
 
-const createTopic = async (req, res, next) => {
+const createTopic = async (req, res) => {
 
     // tạo đối tượng topic
     const topicModel = new TopicModel({
@@ -16,6 +16,8 @@ const createTopic = async (req, res, next) => {
     // lưu topic vào db
     return topicModel.save()
         .then((data) => {
+            // format lại thời gian về kiểu dd/mm/yyyy hh:mm:ss
+            data.createdAt = format(data.createdAt, datePattern);
             return res.status(200).json(JsonObject({
                 code: 0,
                 data: data
@@ -23,19 +25,20 @@ const createTopic = async (req, res, next) => {
         })
         .catch((error) => {
             return res.status(200).json(JsonObject({
-                code: 1,
+                code: 99,
                 data: error
             }));
         });
 };
 
 
-const getAllTopic = async (req, res, next) => {
+const getAllTopic = async (req, res) => {
     //Lấy tất cả các chủ đề lấy các trường id content createdBy createdAt updatedAt updatedBy
     TopicModel.find()
         .select("id content createdBy createdAt updatedAt updatedBy")
         .then((data) => {
             data.forEach((element) => {
+                // format lại thời gian về kiểu dd/mm/yyyy hh:mm:ss
                 element.createdAt = format(element.createdAt, datePattern);
                 element.updatedAt = format(element.updatedAt, datePattern);
             })
@@ -49,7 +52,7 @@ const getAllTopic = async (req, res, next) => {
         .catch((error) => {
             return res.status(200).json(
                 JsonObject({
-                    code: 0,
+                    code: 99,
                     data: error,
                 })
             );
@@ -88,7 +91,8 @@ const getAllAnswers = async (req, res, next) => {
         });
 };
 */
-const deleteTopic = async (req, res, next) => {
+const deleteTopic = async (req, res) => {
+    //Kiểm tra xem topic đó có tồn tại hay không
     let isExist = await verifyTopic(req, res);
     if (isExist) return;
     // Xóa topic bằng id
@@ -104,7 +108,7 @@ const deleteTopic = async (req, res, next) => {
         .catch((error) => {
             return res.status(status.success).json(
                 JsonObject({
-                    code: 0,
+                    code: 99,
                     data: error,
                 })
             );
@@ -138,7 +142,7 @@ const updateTopic = async (req, res) => {
     let isExist = await verifyTopic(req, res);
     if (isExist) return;
 
-    //update topic
+    // Cập nhật lại topic
     TopicModel.updateOne({id: req.body.id},
         {
             $set: {
@@ -159,7 +163,7 @@ const updateTopic = async (req, res) => {
         .catch((error) => {
             return res.status(200).json(
                 JsonObject({
-                    code: 0,
+                    code: 99,
                     data: error
                 })
             );
