@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const datePattern = "yyyy/MM/DD HH:mm:ss";
+const datePattern = "DD/MM/yyyy HH:mm:ss";
 
 // Lấy thời gian hiện tại theo format yyyy/MM/DD HH:mm:ss
 function getNowFormatted() {
@@ -8,8 +8,8 @@ function getNowFormatted() {
 }
 
 // Chuyển từ date sang string
-function format(to) {
-    return moment().format(to);
+function format(date,to) {
+    return moment(date).format(to);
 }
 
 // chuyển từ string sang date

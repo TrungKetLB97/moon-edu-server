@@ -3,9 +3,14 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const express = require("express");
 const cors = require('cors');
+const TopicRouter = require('./src/rest_controller/topic/topic_route');
+const {format,datePattern} = require("./src/system/utils")
 
 // Config thư viện đọc từ file .env
 dotenv.config();
+
+mongoose.Promise = global.Promise;
+
 
 // Khai báo sử dụng express
 const app = express();
@@ -32,6 +37,7 @@ mongoose
         console.log(error);
         console.log("Error connecting to database");
     });
+
 // Thực thi gọi đến domain để test server có hoạt động không
 app.get("/", function (req, res) {
 
@@ -39,9 +45,9 @@ app.get("/", function (req, res) {
 });
 
 
-// app.use(
-//     "/api"
-// );
+app.use("/api/v1",
+    TopicRouter
+);
 
 
 // app.use(function(req, res, next) {
@@ -51,7 +57,9 @@ app.get("/", function (req, res) {
 
 // online server
 app.listen(app.get("port"), function () {
-    console.log(Date.now());
+
+    console.log(format(Date.now(),datePattern));
     console.log("Listening on port " + app.get("port"));
     console.log(db);
+
 });
