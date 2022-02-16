@@ -11,8 +11,11 @@ const TopicModel = new mongoose.Schema({
         type: Number,
         immutable: true, // Không cho phép sửa
     },
-    idCauHoi: Number,
-    content: String,
+    name: String,
+    topicType:String,
+    description: String,
+    enable: Boolean,
+    image:String,
     createdAt: Object,
     createdBy: Number,
     updatedAt: Object,
