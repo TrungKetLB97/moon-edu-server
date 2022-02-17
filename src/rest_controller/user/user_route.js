@@ -1,4 +1,5 @@
 const express = require("express");
+const verifyToken = require("../../system/midleware/auth_controller");
 const {resetPassword} = require("./user_controller");
 const {changePassword} = require("./user_controller");
 const {getUserInfo} = require("./user_controller");
@@ -15,7 +16,7 @@ UserRouter.post("/user/login", login);
 UserRouter.get("/user/list", getListUser);
 UserRouter.post("/user/delete", deleteUser);
 UserRouter.post("/user/update", updateUser);
-UserRouter.get("/user/info", getUserInfo);
+UserRouter.get("/user/info",verifyToken, getUserInfo);
 UserRouter.post("/user/change-password", changePassword);
 UserRouter.post("/user/reset-password", resetPassword);
 

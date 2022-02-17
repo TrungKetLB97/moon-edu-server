@@ -1,4 +1,5 @@
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const express = require("express");
@@ -59,9 +60,7 @@ app.get("/file-upload", showImage);
 
 // online server
 app.listen(app.get("port"), function () {
-
     console.log(format(Date.now(), datePattern));
     console.log("Listening on port " + app.get("port"));
     console.log(db);
-
 });
