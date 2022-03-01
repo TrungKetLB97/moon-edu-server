@@ -15,14 +15,11 @@ const verifyToken = (req, res, next) => {
 		);
 	}
 	try {
-		const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
-		req.user = decoded;
+		req.user = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
 	} catch (err) {
 		return res.status(403).json(JsonObject({ code: 99, message: "Truy cập bị cấm"}));
 	}
 	return next();
 };
-
-
 
 module.exports = verifyToken;

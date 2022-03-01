@@ -1,32 +1,26 @@
 const {getNowFormatted, format, datePattern} = require("../../system/utils");
 const {uploadImage} = require("../../system/module/file_utils");
 const TopicModel = require('../../model/topic_model')
+const VocabularyModel = require('../../model/vocabulary')
 const {JsonList} = require("../../system/base_json");
 const {JsonObject} = require("../../system/base_json");
 
-const createTopic = async (req, res) => {
+const createVocabulary = async (req, res) => {
     if (!validate(req, res)) {
         return;
     }
-
-    let path = req.body.image;
-    if (req.body.data != null && req.body.data !== '') {
-        path = await uploadImage(req.body.data);
-    }
-
-    // tạo đối tượng topic
-    const topicModel = new TopicModel({
-        name: req.body.name,
-        topicType: req.body.topicType,
-        description: req.body.description,
-        enable: req.body.enable,
-        image: path,
+    // tạo đối tượng vocabulary
+    const vocabModel = new VocabularyModel({
+        vietnamese: req.body.vietnamese,
+        english: req.body.english,
+        pronunce: req.body.pronunce,
+        vocabType: req.body.vocabType,
         createdAt: getNowFormatted(),
         createdBy: req.user.id,
     });
 
-    // lưu topic vào db
-    return topicModel.save()
+    // lưu vocabulary vào db
+    return vocabModel.save()
         .then((data) => {
             // format lại thời gian về kiểu dd/mm/yyyy hh:mm:ss
             data.createdAt = format(data.createdAt, datePattern);
@@ -45,23 +39,31 @@ const createTopic = async (req, res) => {
 
 function validate(req, res) {
 
-    if (!req.body.name) {
+    if (!req.body.english) {
         res.status(200).json(JsonObject({
-            code: 1, message: 'name is required'
+            code: 1, message: 'english is required'
         }))
         return false;
     }
-    if (!req.body.topicType) {
+    if (!req.body.vietnamese) {
         res.status(200).json(JsonObject({
-            code: 1, message: 'topicType is required'
+            code: 1, message: 'vietnamese is required'
         }));
         return false;
 
     }
-    if (!"public | private".includes(req.body.topicType)) {
+    if (!req.body.pronunce) {
+        res.status(200).json(JsonObject({
+            code: 1, message: 'pronunce is required'
+        }));
+        return false;
+
+    }
+
+    if (!"public | private".includes(req.body.vocabType)) {
 
         res.status(200).json(JsonObject({
-            code: 1, message: 'topicType must equal \"public\" or \"private\"'
+            code: 1, message: 'vocabType must equal \"public\" or \"private\"'
         }));
         return false;
 
@@ -70,26 +72,24 @@ function validate(req, res) {
 
 }
 
-const getAllTopic = async (req, res) => {
+const getAllVocabulary = async (req, res) => {
 
-    if (!req.query.topicType) {
-        return res.status(200).json(
-            JsonObject({
-                code: 1,
-                message: 'topicType is required',
-            })
-        );
-    }
     let filter = {};
-    if (req.query.topicType === 'private') {
+    if (req.query.vocabType === 'private') {
         filter['createdBy'] = req.user.id;
     }
-    if (req.query.topicType) {
-        filter['topicType'] = req.query.topicType;
+    if (req.query.vocabType) {
+        filter['vocabType'] = req.query.vocabType;
+    }
+    if (req.query.vietnamese) {
+        filter['vietnamese'] = req.query.vietnamese;
+    }
+    if (req.query.english) {
+        filter['english'] = req.query.english;
     }
     //Lấy tất cả các chủ đề lấy các trường id content createdBy createdAt updatedAt updatedBy
-    TopicModel.find(filter)
-        .select("id name description enable image topicType createdBy createdAt updatedAt updatedBy")
+    VocabularyModel.find(filter)
+        .select("id vocabType vietnamese enable english vocabType createdBy createdAt updatedAt updatedBy")
         .then((data) => {
             data.forEach((element) => {
                 // format lại thời gian về kiểu dd/mm/yyyy hh:mm:ss
@@ -113,12 +113,12 @@ const getAllTopic = async (req, res) => {
         });
 };
 
-const deleteTopic = async (req, res) => {
-    //Kiểm tra xem topic đó có tồn tại hay không
-    let isExist = await verifyTopic(req, res);
+const deleteVocabulary = async (req, res) => {
+    //Kiểm tra xem từ vựng đó có tồn tại hay không
+    let isExist = await verifyVocab(req, res);
     if (isExist) return;
     // Xóa topic bằng id
-    TopicModel.deleteOne({id: req.body.id})
+    VocabularyModel.deleteOne({id: req.body.id})
         .then(() => {
             return res.status(200).json(
                 JsonObject({
@@ -137,7 +137,7 @@ const deleteTopic = async (req, res) => {
         });
 };
 
-const verifyTopic = async (req, res) => {
+const verifyVocab = async (req, res) => {
     if (req.body.id === undefined) {
         res.status(200).json(
             JsonObject({
@@ -147,12 +147,12 @@ const verifyTopic = async (req, res) => {
         );
         return true;
     }
-    let topic = await TopicModel.findOne({id: req.body.id});
+    let topic = await VocabularyModel.findOne({id: req.body.id});
     if (topic === null) {
         res.status(200).json(
             JsonObject({
                 code: 99,
-                message: "Chủ đề không tồn tại",
+                message: "Từ vựng không tồn tại",
             })
         );
         return true;
@@ -160,26 +160,21 @@ const verifyTopic = async (req, res) => {
     return false;
 }
 
-const updateTopic = async (req, res) => {
+const updateVocabulary = async (req, res) => {
     if (!validate(req, res)) {
         return;
     }
-    let isExist = await verifyTopic(req, res);
+    let isExist = await verifyVocab(req, res);
     if (isExist) return;
 
-    let path = req.body.image;
-    if (req.body.data != null && req.body.data !== '') {
-        path = await uploadImage(req.body.data);
-    }
-    // Cập nhật lại topic
-    TopicModel.updateOne({id: req.body.id},
+    // Cập nhật lại từ vựng
+    VocabularyModel.updateOne({id: req.body.id},
         {
             $set: {
-                name: req.body.name,
-                topicType: req.body.topicType,
-                description: req.body.description,
-                enable: req.body.enable,
-                image: path,
+                vietnamese: req.body.vietnamese,
+                english: req.body.english,
+                pronunce: req.body.pronunce,
+                vocabType: req.body.vocabType,
                 updatedBy: req.user.id,
                 updatedAt: getNowFormatted(),
             },
@@ -204,7 +199,8 @@ const updateTopic = async (req, res) => {
 
 
 module.exports = {
-    createTopic,
-    getAllTopic,
-    deleteTopic, updateTopic,
+    createVocabulary,
+    getAllVocabulary,
+    deleteVocabulary,
+    updateVocabulary,
 };

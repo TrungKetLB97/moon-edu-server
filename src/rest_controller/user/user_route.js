@@ -17,7 +17,7 @@ UserRouter.get("/user/list", getListUser);
 UserRouter.post("/user/delete", deleteUser);
 UserRouter.post("/user/update", updateUser);
 UserRouter.get("/user/info",verifyToken, getUserInfo);
-UserRouter.post("/user/change-password", changePassword);
+UserRouter.post("/user/change-password",verifyToken, changePassword);
 UserRouter.post("/user/reset-password", resetPassword);
 
 
