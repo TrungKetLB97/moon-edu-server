@@ -7,6 +7,7 @@ const cors = require('cors');
 const TopicRouter = require('./src/rest_controller/topic/topic_route');
 const UserRouter = require('./src/rest_controller/user/user_route');
 const VocabRouter = require('./src/rest_controller/vocabulary/vocabulary_route');
+const HistoryRouter = require('./src/rest_controller/history/history_route');
 const {showImage} = require('./src/system/module/file_utils');
 const {format, datePattern} = require("./src/system/utils")
 
@@ -55,7 +56,8 @@ app.get("/", function (req, res) {
 app.use("/api/v1",
     TopicRouter,
     UserRouter,
-    VocabRouter
+    VocabRouter,
+    HistoryRouter
 );
 
 app.get("/file-upload", showImage);
