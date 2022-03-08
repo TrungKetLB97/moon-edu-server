@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a64f2c1c-2abf-49a8-a672-ef427392f13c" name="Default Changelist" comment="commit" />
+    <list default="true" id="a64f2c1c-2abf-49a8-a672-ef427392f13c" name="Default Changelist" comment="commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,7 +39,6 @@
     <option name="autoscrollToSource" value="true" />
     <option name="flattenPackages" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
     <option name="sortByType" value="true" />
@@ -66,6 +67,19 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="index" type="NodeJSConfigurationType" path-to-js-file="index.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
@@ -85,6 +99,7 @@
       <workItem from="1646098485108" duration="4740000" />
       <workItem from="1646358767034" duration="363000" />
       <workItem from="1646616159678" duration="2857000" />
+      <workItem from="1646745541926" duration="741000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1645033837408</created>
@@ -121,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1646618916945</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="commit">
+      <created>1646745733799</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1646745733799</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
