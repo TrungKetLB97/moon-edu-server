@@ -49,7 +49,7 @@ mongoose
 // Thực thi gọi đến domain để test server có hoạt động không
 app.get("/", function (req, res) {
 
-    res.send("Moon server");
+   return  res.send("Moon server");
 });
 
 
