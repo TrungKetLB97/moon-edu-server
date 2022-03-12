@@ -87,6 +87,12 @@ const getAllTopic = async (req, res) => {
     if (req.query.topicType) {
         filter['topicType'] = req.query.topicType;
     }
+    if (req.query.name) {
+        filter['name'] = {"$regex": req.query.name, "$options": "i"}
+    }
+    if (req.query.enable) {
+        filter['enable'] = req.query.enable;
+    }
     //Lấy tất cả các chủ đề lấy các trường id content createdBy createdAt updatedAt updatedBy
     TopicModel.find(filter)
         .select("id name description enable image topicType createdBy createdAt updatedAt updatedBy")

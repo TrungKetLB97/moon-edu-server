@@ -16,7 +16,6 @@ const UserModel = new mongoose.Schema({
     },
     userName: {
         type: String,
-        immutable: true,
     },
     password: String,
     email: String,

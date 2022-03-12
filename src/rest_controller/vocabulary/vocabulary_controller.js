@@ -82,14 +82,14 @@ const getAllVocabulary = async (req, res) => {
         filter['vocabType'] = req.query.vocabType;
     }
     if (req.query.vietnamese) {
-        filter['vietnamese'] = req.query.vietnamese;
+        filter['vietnamese'] =  {"$regex": req.query.vietnamese, "$options": "i"}
     }
     if (req.query.english) {
-        filter['english'] = req.query.english;
+        filter['english'] =  {"$regex": req.query.english, "$options": "i"}
     }
     //Lấy tất cả các chủ đề lấy các trường id content createdBy createdAt updatedAt updatedBy
     VocabularyModel.find(filter)
-        .select("id vocabType vietnamese enable english vocabType createdBy createdAt updatedAt updatedBy")
+        .select("id vocabType vietnamese enable english pronunce vocabType createdBy createdAt updatedAt updatedBy")
         .then((data) => {
             data.forEach((element) => {
                 // format lại thời gian về kiểu dd/mm/yyyy hh:mm:ss

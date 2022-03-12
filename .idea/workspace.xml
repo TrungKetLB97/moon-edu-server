@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a64f2c1c-2abf-49a8-a672-ef427392f13c" name="Default Changelist" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/user_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/user_model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rest_controller/topic/topic_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/rest_controller/topic/topic_controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rest_controller/user/user_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/rest_controller/user/user_controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rest_controller/vocabulary/vocabulary_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/rest_controller/vocabulary/vocabulary_controller.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,19 +71,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="index" type="NodeJSConfigurationType" path-to-js-file="index.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
@@ -99,7 +90,13 @@
       <workItem from="1646098485108" duration="4740000" />
       <workItem from="1646358767034" duration="363000" />
       <workItem from="1646616159678" duration="2857000" />
-      <workItem from="1646745541926" duration="741000" />
+      <workItem from="1646745541926" duration="1589000" />
+      <workItem from="1646799836686" duration="614000" />
+      <workItem from="1646962780792" duration="135000" />
+      <workItem from="1646995572643" duration="1046000" />
+      <workItem from="1647006254390" duration="2417000" />
+      <workItem from="1647050261825" duration="3547000" />
+      <workItem from="1647059492670" duration="5974000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1645033837408</created>
@@ -143,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1646745733799</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="commit">
+      <created>1646746572066</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1646746572066</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

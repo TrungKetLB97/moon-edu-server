@@ -73,7 +73,7 @@ async function register(req, res) {
 
 // endcode password
 function cryptPassword(password) {
- return bcrypt.hashSync(password,    bcrypt.genSaltSync(10, 'b'));
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(10, 'b'));
 }
 
 // Kiểm tra password
@@ -107,9 +107,9 @@ async function login(req, res) {
     });
 
     // Format lại thời gian
-    user.birth = format(user.birth,datePattern);
-    user.createdAt = format(user.createdAt,datePattern);
-    user.updatedAt = format(user.updatedAt,datePattern);
+    user.birth = format(user.birth, datePattern);
+    user.createdAt = format(user.createdAt, datePattern);
+    user.updatedAt = format(user.updatedAt, datePattern);
 
     // lưu lại fcmtoken của firebase nếu có, phục vụ push notification
     if (req.body.fcmToken) {
@@ -131,9 +131,9 @@ async function getUserInfo(req, res) {
     if (user == null)
         return res.status(200).json(JsonObject({code: 99, message: "Tài khoản chưa được đăng ký"}));
     // Format lại thời gian
-    user.birth = format(user.birth,datePattern);
-    user.createdAt = format(user.createdAt,datePattern);
-    user.updatedAt = format(user.updatedAt,datePattern);
+    user.birth = format(user.birth, datePattern);
+    user.createdAt = format(user.createdAt, datePattern);
+    user.updatedAt = format(user.updatedAt, datePattern);
 
     return res.status(200).json(JsonObject({code: 0, data: user}));
 
@@ -145,6 +145,9 @@ async function getListUser(req, res) {
     // filter theo tên user
     if (req.query.name) {
         filter['name'] = {"$regex": req.query.name, "$options": "i"}
+    }
+    if (req.query.userName) {
+        filter['userName'] = {"$regex": req.query.userName, "$options": "i"}
     }
     // Tìm user rồi trả ra
     UserModel.find(filter).then((data) => {
@@ -172,6 +175,14 @@ async function deleteUser(req, res) {
 }
 
 async function updateUser(req, res) {
+    let user = await UserModel.findOne({"userName": req.body.userName,});
+    if (user) {
+        if (user.id !== req.body.id) {
+            return res.status(200).json(JsonObject({code: 99, message: 'Tên tài khoản đã tồn tại'}));
+
+        }
+
+    }
     // Lấy link ảnh theo client hoặc ảnh mới
     let image = req.body.avatar ?? '';
     if (req.body.data != null && req.body.data !== '') {
@@ -209,12 +220,12 @@ async function changePassword(req, res) {
         return res.status(200).json(JsonObject({code: 99, message: "Người dùng không tồn tại"}));
 
     // Kiểm tra mật khẩu cũ nhập có đúng không
-    if(!comparePassword(req.body.oldPassword,user.password)){
+    if (!comparePassword(req.body.oldPassword, user.password)) {
         return res.status(200).json(JsonObject({code: 99, message: "Sai mật khẩu cũ"}));
     }
 
     // encode new password
-    let  encodePassword = cryptPassword(req.body.newPassword);
+    let encodePassword = cryptPassword(req.body.newPassword);
 
     // Update password người dùng
     UserModel.updateOne({id: req.user.id},
@@ -231,7 +242,7 @@ async function changePassword(req, res) {
 
 async function resetPassword(req, res) {
     // encode new password
-    let  encodePassword = cryptPassword('123@123a');
+    let encodePassword = cryptPassword('123@123a');
     // Reset password người dùng về mật khẩu mặc định
     return UserModel.updateOne(
         {id: req.body.id},
